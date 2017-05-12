@@ -9,7 +9,7 @@ module SimpleCalendar
     def initialize(view_context, opts={})
       @view_context = view_context
       @options = opts
-
+      @view_context.params["start_date"] = Date.strptime(@view_context.params["start_date"], "%m/%d/%Y") if @view_context.params["start_date"].present?
       @params = @view_context.respond_to?(:params) ? @view_context.params : Hash.new
       @params = @params.to_unsafe_h if @params.respond_to?(:to_unsafe_h)
       @params = @params.with_indifferent_access.except(*PARAM_KEY_BLACKLIST)
