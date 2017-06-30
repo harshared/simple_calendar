@@ -40,9 +40,22 @@ module SimpleCalendar
       td_class << 'prev-month'    if start_date.month != day.month && day < start_date
       td_class << 'next-month'    if start_date.month != day.month && day > start_date
       td_class << 'current-month' if start_date.month == day.month
-      td_class << 'has-events'    if sorted_events.fetch(day, []).any?
-
+      if sorted_events.fetch(day, []).any?
+        td_class << 'has-events'    
+        if sorted_events.fetch(day, []).first.type == "federal"
+          td_class << 'federal'  
+        elsif sorted_events.fetch(day, []).first.type == "holiday"
+          td_class << 'holiday'
+        else
+          td_class << 'system'
+        end  
+      end
       td_class
+    end
+
+    def custom_month(month)
+      custom_date = month.to_date
+      view_context.url_for(@params.merge(start_date_param => custom_date))
     end
 
     def url_for_next_view

@@ -1,5 +1,16 @@
 <div class="simple-calendar">
   <div class="calendar-heading">
+    <ul class="nav select-month" role="navigation">
+      <li class="Months">
+        <%= link_to 'Select Month <b class="caret"></b>'.html_safe, root_path, :'data-toggle' => 'dropdown', :class => 'dropdown-toggle' %>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+          <% n = t('date.month_names').count-1 %>
+          <% (1..n).each do |i| %>
+            <li class="dropdown-link"><%= link_to t('date.month_names')[i], calendar.custom_month(t('date.month_names')[i]) %></li> 
+          <% end%>
+        </ul>
+      </li>
+    </ul>    
     <%= link_to t('simple_calendar.previous', default: 'Previous'), calendar.url_for_previous_view %>
     <span class="calendar-title"><%= t('date.month_names')[start_date.month] %> <%= start_date.year %></span>
     <%= link_to t('simple_calendar.next', default: 'Next'), calendar.url_for_next_view %>
@@ -20,9 +31,9 @@
           <% week.each do |day| %>
             <%= content_tag :td, class: calendar.td_classes_for(day) do %>
               <% if defined?(Haml) && respond_to?(:block_is_haml?) && block_is_haml?(block) %>
-                <% capture_haml(day, sorted_events.fetch(day, []), &block) %>
+                <% capture_haml(day.day, sorted_events.fetch(day, []), &block) %>
               <% else %>
-                <% block.call day, sorted_events.fetch(day, []) %>
+                <% block.call day.day, sorted_events.fetch(day, []) %>
               <% end %>
             <% end %>
           <% end %>
